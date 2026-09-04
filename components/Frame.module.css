@@ -1,0 +1,14 @@
+.frame {
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--ar);
+  background-color: var(--tone);
+}
+
+/* Contact-sheet cells crop to a common ratio so the grid reads as a sheet of
+   proofs rather than a ragged pile. */
+.crop {
+  aspect-ratio: 3 / 2;
+  height: 100%;
+  object-fit: cover;
+}

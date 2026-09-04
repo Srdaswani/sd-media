@@ -1,0 +1,251 @@
+/* --------------------------------------------------------------- hero --- */
+
+/* The portrait already has its composition: silhouette hard right, empty
+   glowing sky to the left. The headline is set into that empty sky rather than
+   over the subject, so the type and the photograph share one composition
+   instead of fighting. This is the only place on the site where type sits on
+   an image. */
+.hero {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+}
+
+.heroImg {
+  width: 100%;
+  height: clamp(30rem, 76vh, 52rem);
+  object-fit: cover;
+  object-position: 62% 50%;
+  background: var(--sky-deep);
+  aspect-ratio: auto;
+}
+
+/* The type is held inside the clear sky in the upper-left of the frame — above
+   the lens and left of the silhouette. Both the width cap and the size cap
+   exist to keep it out of the subject; loosening either puts letterforms on
+   top of his face. */
+.heroType {
+  position: absolute;
+  left: var(--gutter);
+  top: clamp(1.5rem, 6vh, 4rem);
+  width: min(38%, 26rem);
+}
+
+.heroLine {
+  font-weight: 800;
+  font-stretch: 118%;
+  font-size: clamp(2.2rem, 4.4vw, 4.1rem);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.heroSub {
+  margin-top: var(--s4);
+  max-width: 26ch;
+  font-stretch: 84%;
+  font-weight: 500;
+  font-size: var(--step-0);
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+/* One orchestrated reveal on load, and nothing else moves on this site
+   without a click. Two elements, staggered, 400ms, done. */
+.reveal {
+  animation: lift 0.55s var(--ease) both;
+}
+.reveal:nth-of-type(2) {
+  animation-delay: 0.12s;
+}
+
+@keyframes lift {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@media (max-width: 48rem) {
+  /* On a phone the photograph gets its own space and the headline sits under
+     it in the apricot. Overlaying type on a 390px-wide crop would bury both. */
+  .hero {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .heroImg {
+    height: 58vh;
+    object-position: 58% 50%;
+  }
+  .heroType {
+    position: static;
+    width: auto;
+    padding: var(--s5) var(--gutter) var(--s4);
+  }
+  .heroLine {
+    font-size: var(--step-4);
+  }
+}
+
+/* -------------------------------------------------------------- recent --- */
+
+.strip {
+  padding-block: var(--s8);
+}
+
+.stripHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s4);
+  margin-bottom: var(--s5);
+}
+
+.stripLink {
+  color: var(--accent);
+  border-bottom: 1px solid currentColor;
+  font-stretch: 84%;
+  font-weight: 500;
+  font-size: var(--step--1);
+  flex: none;
+}
+
+.stripGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.stripCell {
+  display: block;
+  background: var(--sky-deep);
+  overflow: hidden;
+}
+
+.stripCell img {
+  transition: opacity 0.22s var(--ease);
+}
+
+.stripCell:hover img {
+  opacity: 0.82;
+}
+
+@media (max-width: 48rem) {
+  .stripGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------- prose --- */
+
+.say {
+  display: grid;
+  grid-template-columns: minmax(0, 0.4fr) minmax(0, 1fr);
+  gap: var(--s6);
+  padding-block: var(--s8);
+  border-top: 1px solid var(--rule);
+}
+
+.sayKey {
+  font-stretch: 84%;
+  font-weight: 600;
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+}
+
+.sayBody p + p {
+  margin-top: var(--s4);
+}
+
+.sayBody {
+  font-size: var(--step-1);
+  line-height: 1.45;
+}
+
+@media (max-width: 48rem) {
+  .say {
+    grid-template-columns: 1fr;
+    gap: var(--s3);
+  }
+  .sayBody {
+    font-size: var(--step-0);
+  }
+}
+
+/* ------------------------------------------------------------- generic --- */
+
+.pageHead {
+  padding-block: var(--s7) var(--s5);
+}
+
+.pageHead p {
+  margin-top: var(--s4);
+}
+
+.state {
+  padding-block: var(--s7) var(--s9);
+  max-width: 48ch;
+}
+
+.state h2 {
+  font-size: var(--step-2);
+  margin-bottom: var(--s3);
+}
+
+.state p {
+  color: var(--fg-muted);
+}
+
+.state code {
+  font-stretch: 84%;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--s6);
+  padding-block: var(--s6) var(--s9);
+  border-top: 1px solid var(--rule);
+  margin-top: var(--s5);
+}
+
+.contactKey {
+  font-stretch: 84%;
+  font-weight: 600;
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+  margin-bottom: var(--s2);
+}
+
+.contactVal {
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+
+.contactVal a {
+  border-bottom: 1px solid var(--accent);
+}
+
+.contactVal a:hover {
+  color: var(--accent);
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: var(--s7);
+  align-items: start;
+  padding-block: var(--s6) var(--s9);
+}
+
+.aboutGrid p + p {
+  margin-top: var(--s4);
+}
+
+@media (max-width: 48rem) {
+  .aboutGrid {
+    grid-template-columns: 1fr;
+    gap: var(--s5);
+  }
+}

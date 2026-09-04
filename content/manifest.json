@@ -1,0 +1,9 @@
+{
+  "_comment": "Fallback photo list, used only when Cloudinary is not configured. Once the three CLOUDINARY_ env vars are set in Vercel this file is ignored entirely. Format: { \"<category-slug>\": [ { \"file\": \"name.jpg\", \"width\": 2400, \"height\": 1600, \"alt\": \"\u2026\" } ] } with the files in public/photos/<category-slug>/.",
+  "football": [],
+  "lacrosse": [],
+  "soccer": [],
+  "basketball": [],
+  "volleyball": [],
+  "portraits": []
+}

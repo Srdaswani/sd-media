@@ -1,0 +1,396 @@
+/* ------------------------------------------------------------- controls -- */
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s5);
+  flex-wrap: wrap;
+  padding-block: var(--s6) var(--s5);
+}
+
+.title {
+  font-size: var(--step-3);
+}
+
+.meta {
+  margin-top: var(--s2);
+}
+
+.toggle {
+  display: flex;
+  border: 1px solid var(--rule);
+}
+
+.mode {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s4);
+  font-stretch: 84%;
+  font-weight: 500;
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+  transition: color 0.18s var(--ease), background-color 0.18s var(--ease);
+}
+
+.mode + .mode {
+  border-left: 1px solid var(--rule);
+}
+
+.mode:hover {
+  color: var(--fg);
+}
+
+.modeOn {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.modeOn:hover {
+  color: var(--bg);
+}
+
+.glyph {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+
+/* --------------------------------------------------------------- grids --- */
+
+/* Editorial set: justified rows, the layout every serious photo gallery uses.
+   Each frame keeps its own aspect ratio, and every frame in a row lands on a
+   common height, so a landscape and a portrait sit together without either
+   being cropped.
+
+   Pure CSS, no measuring pass. Both flex-basis and flex-grow are proportional
+   to the frame's aspect ratio, so flexbox distributes width in the same
+   proportion and the heights come out equal.
+
+   This replaced CSS columns deliberately. Columns fill top-to-bottom, one
+   column at a time, so the fourth photograph in the set appeared at the top of
+   the second column — the reading order, the lightbox's next/previous, and the
+   frame counter all disagreed with what the eye saw. Rows read left to right,
+   like a contact sheet, and everything lines up again. */
+.set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+}
+
+.set > * {
+  flex-grow: var(--ar-num);
+  flex-basis: calc(var(--ar-num) * 15rem);
+  min-width: 0;
+}
+
+/* Flexbox distributes fractional pixels, which left rows a few pixels ragged
+   at the bottom edge. Stretching each cell to the row height and letting the
+   frame fill it absorbs that rounding into a sub-pixel crop, so the rows sit
+   flush the way a contact sheet's do. */
+.set > .cell {
+  align-self: stretch;
+}
+
+.set > .cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  aspect-ratio: auto;
+}
+
+/* Absorbs the last row so two leftover frames do not stretch to full width. */
+.tail {
+  flex-grow: 1e6;
+  flex-basis: 0;
+  min-width: 0;
+  height: 0;
+}
+
+/* Contact sheet: every frame the same size, the way proofs come off a
+   darkroom sheet. This is the view that makes forty frames navigable. */
+.sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 3px;
+}
+
+.cell {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--riser);
+}
+
+.cell img {
+  transition: opacity 0.25s var(--ease);
+}
+
+.cell:hover img,
+.cell:focus-visible img {
+  opacity: 0.78;
+}
+
+/* The sheet numbers its frames because a contact sheet always did — that is how
+   you told the lab which one to print. On the editorial set there is no number,
+   because there is no sequence to refer to. */
+.cellNo {
+  position: absolute;
+  left: 6px;
+  bottom: 5px;
+  font-stretch: 84%;
+  font-weight: 600;
+  font-size: 0.68rem;
+  color: var(--warm);
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+@media (max-width: 60rem) {
+  .set > * {
+    flex-basis: calc(var(--ar-num) * 11rem);
+  }
+  .sheet {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  /* One frame per row on a phone. A justified row of three on a 390px screen
+     makes every photograph a postage stamp. */
+  .set {
+    display: block;
+  }
+  .set > * {
+    margin-bottom: var(--s3);
+  }
+  .sheet {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+}
+
+/* ------------------------------------------------------- frame counter --- */
+
+/* Reads like the counter on the top plate of a film body. It is wayfinding:
+   in a set of forty-seven it tells you how far down you are. */
+.counter {
+  position: fixed;
+  right: var(--gutter);
+  bottom: var(--s5);
+  z-index: 20;
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  padding: var(--s2) var(--s3);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  font-stretch: 84%;
+  font-weight: 600;
+  font-size: var(--step--1);
+  pointer-events: none;
+}
+
+.counterNow {
+  color: var(--accent);
+  min-width: 2.2ch;
+  text-align: right;
+}
+
+.counterTotal {
+  color: var(--fg-muted);
+}
+
+@media (max-width: 40rem) {
+  .counter {
+    right: var(--s3);
+    bottom: var(--s3);
+  }
+}
+
+/* ------------------------------------------------------------ lightbox --- */
+
+.box {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  /* minmax(0, …) rather than a bare 1fr: a bare 1fr has an automatic minimum
+     size, so the track grew to the photograph's natural height instead of
+     capping it, and a tall frame spilled over the capture data underneath. */
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--pitch);
+  animation: rise 0.22s var(--ease);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.boxBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding: var(--s3) var(--s4);
+  border-bottom: 1px solid var(--rule);
+}
+
+.boxStage {
+  position: relative;
+  min-height: 0;
+}
+
+/* The frame is absolutely positioned to the stage's inset rather than capped
+   with max-height. A percentage max-height needs a definite containing-block
+   height to resolve against, and inside a grid area it silently does not get
+   one — a 1200x1800 portrait rendered at its full 1800px and buried the
+   capture data below it. Filling a known box and letting object-fit letterbox
+   the picture inside cannot fail that way, in either orientation. */
+/* Sized explicitly rather than capped with max-height, and explicitly rather
+   than by opposing insets.
+   Two things bite here. A percentage max-height needs a definite containing
+   block to resolve against and does not get one inside a grid area, so a
+   1200x1800 portrait rendered at its full 1800px and buried the capture data.
+   And on a replaced element, `width: auto` with both `left` and `right` set
+   falls back to the image's intrinsic width instead of stretching — so insets
+   alone do not constrain it either. Giving the box real dimensions and letting
+   object-fit letterbox inside is the one form that holds in both
+   orientations. */
+.boxStage img {
+  position: absolute;
+  top: var(--s4);
+  left: var(--s4);
+  width: calc(100% - var(--s4) * 2);
+  height: calc(100% - var(--s4) * 2);
+  max-width: none;
+  object-fit: contain;
+  aspect-ratio: auto;
+}
+
+/* The counter reused inside the lightbox bar, without the fixed positioning
+   and border it carries when it floats over a gallery. */
+.boxCount {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  font-stretch: 84%;
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--rule);
+  color: var(--dust);
+  transition: color 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.close:hover {
+  color: var(--warm);
+  border-color: var(--warm);
+}
+
+.arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 64px;
+  color: var(--dust);
+  transition: color 0.18s var(--ease);
+}
+
+.arrow:hover {
+  color: var(--flare);
+}
+
+.arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.prev {
+  left: 0;
+}
+.next {
+  right: 0;
+}
+
+/* Real capture data, read out of each file's EXIF. Coaches and other
+   photographers read this; it is the one thing on the page a template
+   could not invent. */
+.capture {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  padding: var(--s3) var(--s4) var(--s5);
+  border-top: 1px solid var(--rule);
+}
+
+.captureItem {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.captureKey {
+  font-stretch: 84%;
+  font-size: 0.68rem;
+  color: color-mix(in srgb, var(--dust) 70%, transparent);
+}
+
+.captureVal {
+  font-stretch: 100%;
+  font-weight: 500;
+  font-size: var(--step--1);
+  color: var(--warm);
+}
+
+.captureNone {
+  padding: var(--s3) var(--s4) var(--s5);
+  border-top: 1px solid var(--rule);
+}
+
+@media (max-width: 40rem) {
+  .arrow {
+    width: 40px;
+  }
+  .capture {
+    gap: var(--s2) var(--s4);
+  }
+}
+
+/* ------------------------------------------------------------- states --- */
+
+.state {
+  padding-block: var(--s8) var(--s9);
+  max-width: 46ch;
+}
+
+.stateTitle {
+  font-size: var(--step-2);
+  margin-bottom: var(--s3);
+}
+
+.stateBody {
+  color: var(--fg-muted);
+}
+
+.stateBody code {
+  font-family: var(--face);
+  font-stretch: 84%;
+  font-weight: 600;
+  color: var(--fg);
+}
