@@ -1,12 +1,29 @@
 /* ------------------------------------------------------------- controls -- */
 
+/* A gallery is a dead end without this. The header nav gets you to /work, but
+   a link that names where it goes reads as part of the page rather than
+   chrome. */
+.back {
+  display: inline-block;
+  margin-top: var(--s6);
+  color: var(--fg-muted);
+  font-stretch: 84%;
+  font-weight: 500;
+  font-size: var(--step--1);
+  transition: color 0.18s var(--ease);
+}
+
+.back:hover {
+  color: var(--accent);
+}
+
 .head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: var(--s5);
   flex-wrap: wrap;
-  padding-block: var(--s6) var(--s5);
+  padding-block: var(--s3) var(--s5);
 }
 
 .title {
@@ -125,12 +142,13 @@
 }
 
 .cell img {
-  transition: opacity 0.25s var(--ease);
+  transition: opacity 0.25s var(--ease), transform 0.5s var(--ease);
 }
 
 .cell:hover img,
 .cell:focus-visible img {
-  opacity: 0.78;
+  opacity: 0.88;
+  transform: scale(1.03);
 }
 
 /* The sheet numbers its frames because a contact sheet always did — that is how

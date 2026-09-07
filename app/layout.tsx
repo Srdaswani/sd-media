@@ -11,8 +11,8 @@ import { site } from "@/content/site.config";
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} · ${site.tagline}`,
+    template: `%s · ${site.name}`,
   },
   description: `Sports photography and film in ${site.location}. Football, lacrosse, soccer, basketball, volleyball and portraits for athletes, teams and families.`,
   openGraph: {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import type { Photo } from "@/lib/media/types";
 import { transform } from "@/lib/media/url";
 import Frame from "./Frame";
@@ -77,6 +78,17 @@ function Lightbox({
       (returnFocus.current as HTMLElement | null)?.focus?.();
     };
   }, [index, photos.length, onClose, onMove]);
+
+  // Warm the next and previous frames so arrowing through a set doesn't flash
+  // a blank stage between photographs.
+  useEffect(() => {
+    for (const i of [index + 1, index - 1]) {
+      const n = photos[i];
+      if (!n) continue;
+      const img = new Image();
+      img.src = n.src.includes("/image/upload/") ? transform(n.src, 2400) : n.src;
+    }
+  }, [index, photos]);
 
   const fields: [string, string | undefined][] = [
     ["Camera", photo.capture.camera],
@@ -157,7 +169,7 @@ function Lightbox({
         </dl>
       ) : (
         <p className={`${s.captureNone} dense`}>
-          This frame was exported without its capture data.
+          This frame was exported without its camera settings.
         </p>
       )}
     </div>
@@ -239,9 +251,9 @@ export default function Gallery({
       <div className={s.state}>
         <h2 className={s.stateTitle}>No frames here yet</h2>
         <p className={s.stateBody}>
-          {title} is set up and live — it is waiting on photographs. Drop them
-          into the <code>{title.toLowerCase()}</code> folder in Cloudinary and
-          they will show up here within five minutes.
+          {title} is live and waiting on photos. Drop them into the{" "}
+          <code>{title.toLowerCase()}</code> folder in Cloudinary and they'll
+          show up here within five minutes.
         </p>
       </div>
     );
@@ -249,6 +261,10 @@ export default function Gallery({
 
   return (
     <>
+      <Link href="/work" className={s.back}>
+        All sports
+      </Link>
+
       <div className={s.head}>
         <div>
           <h1 className={s.title}>{title}</h1>

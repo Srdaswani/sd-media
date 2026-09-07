@@ -17,7 +17,7 @@ export default function Nav() {
 
   return (
     <header className={s.bar}>
-      <Link href="/" className={s.mark} aria-label={`${site.name} — home`}>
+      <Link href="/" className={s.mark} aria-label={`${site.name}, home`}>
         {site.name}
       </Link>
       <nav className={s.links} aria-label="Main">

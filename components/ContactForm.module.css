@@ -1,0 +1,120 @@
+.form {
+  display: grid;
+  gap: var(--s4);
+  max-width: 34rem;
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.label {
+  font-stretch: 84%;
+  font-weight: 600;
+  font-size: var(--step--1);
+  color: var(--fg-muted);
+}
+
+/* Underlines, not boxes. A boxed input with a rounded corner and a drop shadow
+   is the single most template-looking element on any site, and this page sits
+   on the same apricot ground as everything else. */
+.input,
+.area {
+  font: inherit;
+  font-size: var(--step-0);
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  border-radius: 0;
+  padding: var(--s2) 0;
+  transition: border-color 0.18s var(--ease);
+  width: 100%;
+}
+
+.input:focus,
+.area:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.input:focus-visible,
+.area:focus-visible {
+  outline: none;
+}
+
+/* The message box gets a faint ground as well as the underline. With only the
+   underline it read as empty space and people missed that it was a field. */
+.area {
+  resize: vertical;
+  min-height: 7rem;
+  line-height: 1.5;
+  padding: var(--s3);
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+}
+
+/* Off-screen rather than display:none. Some bots skip hidden fields but fill
+   anything they can reach in the DOM. */
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.submit {
+  justify-self: start;
+  margin-top: var(--s2);
+  padding: var(--s3) var(--s6);
+  background: var(--fg);
+  color: var(--bg);
+  font-stretch: 100%;
+  font-weight: 600;
+  font-size: var(--step-0);
+  transition: background-color 0.18s var(--ease), opacity 0.18s var(--ease);
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--accent);
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.note {
+  font-stretch: 84%;
+  font-size: var(--step--1);
+  line-height: 1.45;
+}
+
+.bad {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.good {
+  padding: var(--s5) 0;
+  max-width: 34rem;
+}
+
+.goodTitle {
+  font-size: var(--step-2);
+  margin-bottom: var(--s3);
+}
+
+@media (max-width: 40rem) {
+  .pair {
+    grid-template-columns: 1fr;
+  }
+}

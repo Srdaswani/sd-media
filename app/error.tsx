@@ -10,8 +10,8 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
           This gallery did not load
         </h1>
         <p>
-          The photographs are stored off-site and that request failed. Nothing
-          is lost — it is almost always a slow connection rather than a missing
+          The photos are stored off-site and that request didn't go through.
+          Nothing's lost. It's usually a slow connection rather than a missing
           gallery.
         </p>
         <p style={{ marginTop: "var(--s4)" }}>

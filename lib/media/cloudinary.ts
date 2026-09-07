@@ -128,6 +128,13 @@ async function search(expression: string, max = 200) {
 }
 
 export async function photosIn(category: string): Promise<Photo[]> {
+  // `asset_folder`, not `folder`. Every Cloudinary account created since June
+  // 2024 defaults to "dynamic folder mode," where `folder` is a legacy field
+  // that isn't populated on new assets — the search silently matches nothing.
+  // Cloudinary's own docs: "Search expressions that include the folder field
+  // are only useful for searching within fixed folder mode product
+  // environments. In dynamic folder mode, the search expressions should use
+  // the asset_folder field."
   const { resources } = await search(
     `asset_folder="${ROOT}/${category}" AND resource_type:image AND -tags=hidden`,
   );

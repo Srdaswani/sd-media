@@ -222,6 +222,19 @@ p {
   top: var(--s3);
 }
 
+/* A short fade on each route so moving between pages reads as one site rather
+   than a hard cut between documents. 180ms: enough to feel deliberate, short
+   enough that it never delays a click. */
+main {
+  animation: page-in 0.18s var(--ease) both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
 /* ------------------------------------------------------------- motion --- */
 
 @media (prefers-reduced-motion: reduce) {

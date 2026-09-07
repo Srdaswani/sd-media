@@ -11,12 +11,12 @@ export default function NotFound() {
           Nothing at this address
         </h1>
         <p>
-          The page you asked for is not here — it may have been a sport I have
-          since renamed. The{" "}
+          There's no page at this address. It may have been a sport I've since
+          renamed. The{" "}
           <Link href="/work" style={{ borderBottom: "1px solid var(--accent)" }}>
             work index
           </Link>{" "}
-          lists everything that is live.
+          lists everything that's live.
         </p>
       </div>
     </div>

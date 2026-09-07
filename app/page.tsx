@@ -56,20 +56,18 @@ export default async function Home() {
                 key={p.id}
                 href={`/work/${p.id.split("/").at(-2) ?? ""}`}
                 className={s.stripCell}
+                style={
+                  { "--ar-num": (p.width / p.height).toFixed(4) } as React.CSSProperties
+                }
               >
                 <img
                   src={url(p)}
                   alt={p.alt}
-                  width={800}
-                  height={533}
+                  width={p.width}
+                  height={p.height}
                   loading="lazy"
                   decoding="async"
-                  style={{
-                    aspectRatio: "3 / 2",
-                    objectFit: "cover",
-                    backgroundColor: p.tone,
-                    width: "100%",
-                  }}
+                  style={{ backgroundColor: p.tone }}
                 />
               </Link>
             ))}
@@ -81,14 +79,14 @@ export default async function Home() {
         <p className={s.sayKey}>What this is</p>
         <div className={s.sayBody}>
           <p>
-            I shoot high school and club sport across the Triangle — the whole
-            game, both sidelines, and the ten minutes afterwards that usually
-            matter more than the score.
+            I shoot high school and club sports around the Triangle. The whole
+            game, both sidelines, and the ten minutes after the whistle that
+            usually matter more than the score did.
           </p>
           <p>
-            Galleries go up within a couple of days. Every frame here was taken
-            at a real game, and the capture settings are attached to each one if
-            you want to see how it was made.
+            Galleries go up within a couple of days of a game. Every frame here
+            came off a real sideline, and the camera settings sit on each one if
+            you want to see how it was shot.
           </p>
         </div>
       </section>
