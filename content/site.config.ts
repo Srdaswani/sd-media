@@ -82,6 +82,7 @@ export const categories: Category[] = [
     slug: "portraits",
     name: "Portraits",
     blurb: "Senior nights, signing days, and headshots that hold up.",
+    draft: true,
   },
 ];
 
