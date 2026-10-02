@@ -79,6 +79,11 @@ export const categories: Category[] = [
     blurb: "That half second at the top of a jump.",
   },
   {
+    slug: "cars",
+    name: "Cars",
+    blurb: "Clean lines and good light.",
+  },
+  {
     slug: "portraits",
     name: "Portraits",
     blurb: "Senior nights, signing days, and headshots that hold up.",
